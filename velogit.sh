@@ -25,11 +25,11 @@ find_file() {
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ -z "$1" ]; then
     show_help
 elif [ "$1" == "-s" ] || [ "$1" == "--sync" ]; then
-    node "$SCRIPT_DIR/srcs/main.js" sync
+    node "$SCRIPT_DIR/srcs/js/main.js" sync
 else
     file_path=$(find_file "$1")
     if [ -n "$file_path" ]; then
-        node "$SCRIPT_DIR/srcs/main.js" post "$file_path"
+        node "$SCRIPT_DIR/srcs/js/main.js" post "$file_path"
     else
         echo "오류: 파일을 찾을 수 없습니다: $1"
         exit 1
