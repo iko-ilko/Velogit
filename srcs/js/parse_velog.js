@@ -1,6 +1,11 @@
-function parseVelogPost(html) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+async function parseVelogPost() {
+    const url = 'https://velog.io/@dlftjdgg/Libft';
+
+    const response = await axios.get(url);
+    const html = response.data;
+    const dom = new JSDOM(html);
+    const doc = dom.window.document;
+    console.log("doc", doc);
     
     // 제목 찾기
     const titleElement = doc.querySelector('.head-wrapper h1');
