@@ -1,10 +1,16 @@
 const path = require('path');
 
-
-async function parseVelogPost() {
+async function importModules() {
     const axios = (await import('../packages/node_modules/axios/index.js')).default;
     const { JSDOM } = await import('../packages/node_modules/jsdom/lib/api.js');
-    
+    const TurndownService = (await import('../packages/node_modules/turndown/lib/turndown.cjs.js')).default;
+
+    return { axios, JSDOM, TurndownService};
+}
+
+async function parseVelogPost() {
+    const { axios, JSDOM, TurndownService} = await importModules();
+
     const url = 'https://velog.io/@dlftjdgg/Libft';
 
     const response = await axios.get(url);
@@ -29,6 +35,10 @@ async function parseVelogPost() {
     console.log("title: ", title);
     console.log("tag: ", tags);
     console.log("content: ", content);
+
+    const turndownService = new TurndownService();
+    const markdown = turndownService.turndown(content);
+    console.log("\n\nmarkdown: ", markdown);
 }
 //     // 프론트매터 생성
 //     const frontMatter = `---
