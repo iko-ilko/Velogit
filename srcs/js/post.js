@@ -22,9 +22,15 @@ async function main() {
   ]
     });
 
-  const page = await browser.newPage(); // 신규 탭(페이지) 생성
+  const page = (await browser.pages())[0];
 
-  await page.goto('https://velog.io'); // 해당 URL로 이동
+  // if 로그인 안돼있으면
+  // await page.goto('https://v3.velog.io/api/auth/v3/social/redirect/google?next=&amp;isIntegrate=0');
+  // else
+  // await page.goto('https://velog.io'); 
+
+  // 로그인 된 상황
+  await page.goto('https://velog.io/write');
 
   // await browser.close(); // 브라우저 종료
 })();
