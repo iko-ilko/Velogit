@@ -25,15 +25,30 @@ async function main() {
   const page = (await browser.pages())[0];
 
   // if 로그인 안돼있으면
-  // await page.goto('https://v3.velog.io/api/auth/v3/social/redirect/google?next=&amp;isIntegrate=0');
+  await page.goto('https://v3.velog.io/api/auth/v3/social/redirect/google?next=&amp;isIntegrate=0');
+  await checkDoLogin(page);
+  console.log("velog is loggined");
   // else
   // await page.goto('https://velog.io'); 
 
   // 로그인 된 상황
-  await page.goto('https://velog.io/write');
+  // await page.goto('https://velog.io/write');
 
   // await browser.close(); // 브라우저 종료
 })();
 }
 
 main().catch(console.error);
+
+
+async function checkDoLogin(page) {
+  if (page.url() === "https://velog.io/")
+    return ;
+
+  console.log("Not logged in, waiting for user to log in...");
+  
+  await page.waitForFunction(
+    'window.location.href === "https://velog.io/"',
+    { timeout: 0 }
+  );
+}
