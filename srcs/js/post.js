@@ -1,13 +1,16 @@
 async function importModules() {
-  const puppeteer = (await import('../packages/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js')).default;
-  return { puppeteer};
+  const puppeteer = (await import('../packages/node_modules/puppeteer/lib/esm/puppeteer/puppeteer.js')).default;
+  const {exec} = (await import('child_process'));
+  const {stat} = (await import('fs/promises'));
+  return { puppeteer, exec, stat };
 }
 async function main() {
-  const { puppeteer } = await importModules();
+  const { puppeteer, exec, stat } = await importModules();
+  await setSymbolicLinkProfile(exec, stat);
 
 (async () => { 
   const browser = await puppeteer.launch({
-    executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    // executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     // defaultViewport : {
     //   width: 1920,
     //   height: 1080
@@ -16,8 +19,8 @@ async function main() {
     args: [
       '--user-data-dir=/Users/ilsung/Velogit/srcs/chrome_profile',
       '--profile-directory=Default',
-      // '--no-first-run',
-      // '--no-default-browser-check',
+      '--no-first-run',
+      '--no-default-browser-check',
       '--disable-blink-features=AutomationControlled', // 이 옵션으로 자동화된 프로그램 무시하고 구글 로그인 성공
   ]
     });
@@ -39,6 +42,24 @@ async function main() {
 }
 
 main().catch(console.error);
+
+async function setSymbolicLinkProfile(exec, stat) {
+  try {
+    await stat('../chrome_profile');
+  } catch (error) {
+    return new Promise((resolve, reject) => {
+      const command = `ln -s /Users/ilsung/Library/Application\\ Support/Google/Chrome ../chrome_profile`;
+      exec(command, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error executing command: ${error}`);
+          return reject(error);
+        }
+        console.log('alraedy chrome_porifle');
+        resolve();
+      });
+    });
+  }
+}
 
 
 async function checkDoLogin(page) {
