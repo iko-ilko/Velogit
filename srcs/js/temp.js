@@ -1,8 +1,13 @@
+import dotenv from '../packages/node_modules/dotenv/lib/main.js';
 import puppeteer from '../packages/node_modules/puppeteer/lib/esm/puppeteer/puppeteer.js';
-import { MarkdownParser } from './markdown-parser.js';
+import { exec } from 'child_process';
+import { stat } from 'fs/promises';
 
+dotenv.config({ path: '../../.env' });
+const env = { BASE_URL: process.env.BASE_URL};
 
-export async function post(filepath) {
+async function main() {
+  await setSymbolicLinkProfile();
 
 (async () => { 
   const browser = await puppeteer.launch({
@@ -25,10 +30,30 @@ export async function post(filepath) {
 
   await postToVelog(page);
 
+
+
 })();
 }
 
-// post().catch(console.error);
+main().catch(console.error);
+
+async function setSymbolicLinkProfile() {
+  try {
+    await stat(`${env.BASE_URL}/srcs/chrome_profile`);
+  } catch (error) {
+    return new Promise((resolve, reject) => {
+      const command = `ln -s /Users/ilsung/Library/Application\\ Support/Google/Chrome ${env.BASE_URL}/srcs/chrome_profile`;
+      exec(command, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error executing command: ${error}`);
+          return reject(error);
+        }
+        console.log('alraedy chrome_porifle');
+        resolve();
+      });
+    });
+  }
+}
 
 
 async function checkDoLogin(page) {

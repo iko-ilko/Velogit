@@ -22,7 +22,20 @@ find_file() {
     echo "$found_file"
 }
 
+# .env 파일 생성 및 BASE_URL 설정 함수
+setup_env() {
+    local env_file="$SCRIPT_DIR/.env"
+    if [ ! -f "$env_file" ]; then
+        touch "$env_file"
+    fi
+
+    if ! grep -q "^BASE_URL=" "$env_file"; then
+        echo "BASE_URL=$SCRIPT_DIR" >> "$env_file"
+    fi
+}
+
 # 메인 로직
+setup_env
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ -z "$1" ]; then
     show_help
 elif [ "$1" == "-s" ] || [ "$1" == "--sync" ]; then

@@ -1,8 +1,8 @@
 ---
-title: "게시물 제목"
-tags: ["tag1", "tag2", "tag3"]
-series: "시리즈 이름"
-velog_url: "https://velog.io/@username/post-slug"
+title: "Libft"
+tags: ["42Seoul", "C", "library"]
+series: "42돌아보기"
+velog_url:
 ---
 
 #### 과제 목적
@@ -10,7 +10,7 @@ velog_url: "https://velog.io/@username/post-slug"
 42seoul 본과정 첫 과제.  
 c언어의 기본적인 함수들을 직접 구현하고 나만의 라이브러리를 만드는 과제다.
 
-![](https://velog.velcdn.com/images/dlftjdgg/post/b911c45c-602c-4389-9c48-b61311f2377a/image.png)
+![alt text](image.png)
 
 비교적 간단한 <string.h>에 있는 strlen 함수부터 이해가 어려워서 머리를 아프게했던 strlcat, 다른 언어에는 기본적으로 있기도 하는 split 함수 등등.  
 strlen처럼 간단한 함수는 c의 문법을 잘 이용해서 간결하고 읽기 쉬운 코드가 무엇일까 고민을 하느라 시간을 썼다.  
