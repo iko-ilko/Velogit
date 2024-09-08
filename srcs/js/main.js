@@ -7,9 +7,6 @@ import { post } from './post.js';
 
 dotenv.config({ path: '.env' });
 const env = { BASE_URL: process.env.BASE_URL };
-console.log('Loaded ENV vars:', env);
-
-
 
 const commands = {
   post: post,

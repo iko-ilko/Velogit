@@ -22,20 +22,29 @@ find_file() {
     echo "$found_file"
 }
 
-# .env 파일 생성 및 BASE_URL 설정 함수
+# .env 파일 생성 함수
 setup_env() {
     local env_file="$SCRIPT_DIR/.env"
     if [ ! -f "$env_file" ]; then
         touch "$env_file"
     fi
+}
 
-    if ! grep -q "^BASE_URL=" "$env_file"; then
-        echo "BASE_URL=$SCRIPT_DIR" >> "$env_file"
+# 환경 변수 추가 함수
+add_env() {
+    local key="$1"
+    local value="$2"
+    local env_file="$SCRIPT_DIR/.env"
+    if grep -q "^$key=" "$env_file"; then
+        sed -i '' "s|^$key=.*|$key=$value|" "$env_file"
+    else
+        echo "\n$key=$value" >> "$env_file"
     fi
 }
 
 # 메인 로직
 setup_env
+add_env "BASE_URL" "$SCRIPT_DIR"
 if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ -z "$1" ]; then
     show_help
 elif [ "$1" == "-s" ] || [ "$1" == "--sync" ]; then
@@ -53,6 +62,9 @@ elif [ "$1" == "-i" ] || [ "$1" == "--install" ]; then
     fi
 else
     file_path=$(find_file "$1")
+    mark_image=$(dirname "$file_path")
+    add_env "CUR_IMG_DIR" "$mark_image"
+    echo "mark_image: $mark_image"
     if [ -n "$file_path" ]; then
         node "$SCRIPT_DIR/srcs/js/main.js" post "$file_path"
     else
