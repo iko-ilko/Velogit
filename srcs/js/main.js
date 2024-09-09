@@ -38,7 +38,6 @@ main();
 
 
 async function setSymbolicLinkProfile() {
-    console.log(`${env.BASE_URL}/srcs/chrome_profile`);
     try {
       await stat(`${env.BASE_URL}/srcs/chrome_profile`);
     } catch (error) {

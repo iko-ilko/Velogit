@@ -64,7 +64,6 @@ else
     file_path=$(find_file "$1")
     mark_image=$(dirname "$file_path")
     add_env "CUR_IMG_DIR" "$mark_image"
-    echo "mark_image: $mark_image"
     if [ -n "$file_path" ]; then
         node "$SCRIPT_DIR/srcs/js/main.js" post "$file_path"
     else
